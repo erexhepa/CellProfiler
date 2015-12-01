@@ -1,3 +1,4 @@
+import ctypes.util
 import glob
 import os
 import setuptools
@@ -49,7 +50,7 @@ class Install(setuptools.command.install.install):
                         f.flush()
 
         dependencies = os.path.abspath(os.path.join(
-            self.build_lib, 'imagej', 'jars', 
+            self.build_lib, 'imagej', 'jars',
             'cellprofiler-java-dependencies-classpath.txt'))
 
         if not os.path.isfile(dependencies):
@@ -115,6 +116,9 @@ class Test(setuptools.Command):
 
 
 setuptools.setup(
+    app=[
+        "CellProfiler.py"
+    ],
     author="cellprofiler-dev",
     author_email="cellprofiler-dev@broadinstitute.org",
     classifiers=[
@@ -136,6 +140,10 @@ setuptools.setup(
         "install": Install,
         "test": Test
     },
+    data_files=[
+        ("", ["artwork"]),
+        ("", ["plugins"])
+    ],
     description="",
     entry_points={
         'console_scripts': [
@@ -164,7 +172,32 @@ setuptools.setup(
     license="BSD",
     long_description="",
     name="cellprofiler",
-    package_data = {
+    options={
+        "py2app": {
+            "argv_emulation": True,
+            "iconfile": "artwork/CellProfilerIcon.icns",
+            "includes": [
+                "h5py",
+                "h5py._errors",
+                "h5py._objects",
+                "h5py._proxy"
+                "h5py.defs",
+                "h5py.h5ac",
+                "h5py.utils"
+            ],
+            "packages": [
+                "cellprofiler",
+                "contrib",
+                "imagej",
+                "h5py",
+                "javabridge"
+            ],
+            "resources": [
+                "artwork/CellProfilerIcon.png"
+            ]
+        }
+    },
+    package_data={
         "artwork": glob.glob(os.path.join("artwork", "*"))
     },
     packages=setuptools.find_packages(exclude=[
