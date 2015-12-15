@@ -1,19 +1,16 @@
-install:
+before_install:
   - sudo apt-get update
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-      wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
-    else
-      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-    fi
+  - wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
   - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
-  - conda info -a
-  - conda create -q -n CellProfiler python=$TRAVIS_PYTHON_VERSION matplotlib numpy scipy
-  - source activate CellProfiler
-  - python setup.py install
+  - conda config --set always_yes yes --set changeps1 no 
+  - conda update --quiet conda
+  - conda info --all
+  - conda create --name default --quiet h5py libtiff lxml matplotlib mysql-python numpy pandas pytest pyzmq scikit-image scikit-learn scipy wxpython
+  - source activate default
+install:
+  - pip install --editable .
 language: python
 notifications:
   email: false
@@ -21,4 +18,3 @@ python:
   - 2.7
 script:
   - python setup.py test
-
