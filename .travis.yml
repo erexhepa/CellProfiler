@@ -1,51 +1,16 @@
-addons:
-  apt:
-    packages:
-      - libhdf5-serial-dev
-      - libzmq3-dev
-      - python-imaging
-      - python-lxml
-      - python-matplotlib
-      - python-mysqldb
-      - python-numpy
-      - python-pandas
-      - python-pip
-      - python-scipy
-      - python-tk
-      - python-wxgtk2.8
-env:
-  - LC_ALL="en_US.UTF-8"
-before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - sleep 3
-cache:
-  apt: true
-  directories:
-    - $HOME/.cache/pip
-    - $TRAVIS_BUILD_DIR/imagej/jars
+before_install:
+  - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+  - chmod +x miniconda.sh
+  - ./miniconda.sh -b
+  - export PATH=/home/travis/miniconda/bin:$PATH
+  - conda update --yes conda
+  - sudo rm -rf /dev/shm
+  - sudo ln -s /run/shm /dev/shm
+install:
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION matplotlib numpy scipy
+  - python setup.py install
 language: python
 notifications:
   email: false
 python:
   - 2.7
-sudo: false
-virtualenv:
-  system_site_packages: true
-install:
-  - pip install --upgrade pip
-  - pip install --upgrade wheel
-  - pip install --upgrade pytest
-  - pip install cython
-#
-# Explicitly install Javabridge here - if you let it get installed implicitly
-# by parsing requirements.txt, it is somehow linked to the wrong version
-# of numpy
-#
-  - pip install --no-deps javabridge
-  - pip install --requirement requirements.txt
-  - pip install --editable git+https://github.com/h5py/h5py.git#egg=h5py
-  - pip install --editable git+https://github.com/CellH5/cellh5.git#egg=cellh5
-  - pip freeze
-script:
-  - python setup.py develop --no-deps install test
