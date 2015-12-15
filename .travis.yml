@@ -9,6 +9,10 @@ before_install:
   - conda info --all
   - conda create --name default --quiet cython h5py libtiff lxml mysql-python pandas pyzmq scikit-image scikit-learn wxpython
   - source activate default
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3
 install:
   - pip install -e .
 language: python
