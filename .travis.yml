@@ -10,11 +10,12 @@ before_install:
   - conda create --name default --quiet cython h5py libtiff lxml mysql-python pandas pyzmq scikit-image scikit-learn wxpython
   - source activate default
 install:
-  - pip install --editable .
+  - pip install -e .
 language: python
 notifications:
   email: false
 python:
   - 2.7
 script:
+  - python setup.py install
   - python setup.py test
