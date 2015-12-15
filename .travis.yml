@@ -19,3 +19,6 @@ notifications:
   email: false
 python:
   - 2.7
+script:
+  - python setup.py test
+
