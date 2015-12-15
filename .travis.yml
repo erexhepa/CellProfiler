@@ -17,5 +17,6 @@ notifications:
 python:
   - 2.7
 script:
+  - python external_dependencies.py
   - python setup.py install
   - python setup.py test
