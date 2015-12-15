@@ -7,7 +7,7 @@ before_install:
   - conda config --set always_yes yes --set changeps1 no 
   - conda update --quiet conda
   - conda info --all
-  - conda create --name default --quiet h5py libtiff lxml matplotlib mysql-python numpy pandas pytest pyzmq scikit-image scikit-learn scipy wxpython
+  - conda create --name default --quiet cython h5py libtiff lxml mysql-python pandas pyzmq scikit-image scikit-learn wxpython
   - source activate default
 install:
   - pip install --editable .
